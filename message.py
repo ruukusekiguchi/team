@@ -13,6 +13,14 @@ import requests
 import json
 # from googletrans import Translator
 
+import RPi.GPIO as GPIO
+import time
+
+# 初期設定
+GPIO.setmode(GPIO.BCM)
+
+# GPIO 15 をデジタル入力に設定
+GPIO.setup(15, GPIO.IN)
 
 city_name = "Monteria" # 主要な都市名はいけるっぽい。
 API_KEY = "1d6ea2750cd6e958153b8995b195109f" # xxxに自分のAPI Keyを入力。
@@ -48,7 +56,7 @@ def handle_message(event):
     #変数宣言
     global mode
     global place
-    
+    count = 0
     #表示モード
     if mode != 1:
         if lineRes == '地点登録':
@@ -71,7 +79,22 @@ def handle_message(event):
             
         if lineRes == '開始':
             if place != '':
+                botRes = '予報：雨'
+                try:
+                    # Ctrl-C 待ち
+                    while True:
+                        print ("待機中")
+                        if GPIO.input(15) == 0:
+                            if count >= 20:
+                                print ("rainynow")
+                                count = 0 + 1
+                            else:
+                                botRes = '観測地点で雨が降っています'
+                except:
+                    print ("interrupted")
 
+                finally:
+                    GPIO.cleanup()
             else:
                 botRes = '地点が登録されていません'
 
