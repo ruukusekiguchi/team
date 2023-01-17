@@ -79,17 +79,21 @@ def handle_message(event):
             
         if lineRes == '開始':
             if place != '':
-                botRes = '予報：雨'
+                # weather = '予報：雨'
+                # line_bot_api.reply_message(
+                # event.reply_token,
+                # TextSendMessage(text=weather))
                 try:
+                    print ("stay")
                     # Ctrl-C 待ち
-                    while True:
-                        print ("待機中")
+                    while True:  
                         if GPIO.input(15) == 0:
-                            if count >= 20:
-                                print ("rainynow")
-                                count = 0 + 1
+                            if count <= 2000:
+                                print (count)
+                                count = count + 1
                             else:
                                 botRes = '観測地点で雨が降っています'
+                                break
                 except:
                     print ("interrupted")
 
