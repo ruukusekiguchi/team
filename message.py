@@ -11,7 +11,7 @@ from linebot.models import (
 
 import requests
 import json
-from googletrans import Translator
+# from googletrans import Translator
 
 
 city_name = "Monteria" # 主要な都市名はいけるっぽい。
@@ -69,15 +69,9 @@ def handle_message(event):
             else:
                 botRes = '登録されていません'
             
-        if lineRes == '天気':
+        if lineRes == '開始':
             if place != '':
-                # city_name = "Monteria" # 主要な都市名はいけるっぽい。
-                url = api.format(city = place, key = API_KEY)
-                response = requests.get(url)
-                data = response.json()
-                
-                print(data["weather"][0]["description"])
-                botRes = data["weather"][0]["description"]
+
             else:
                 botRes = '地点が登録されていません'
 
